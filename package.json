@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WMikhail/stylus-tooling.git"
+    "url": "git+https://github.com/WMikhail/stylus-tooling.git"
   },
   "homepage": "https://github.com/WMikhail/stylus-tooling#readme",
   "bugs": {

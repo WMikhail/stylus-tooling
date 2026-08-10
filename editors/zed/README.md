@@ -20,7 +20,7 @@ adapter or manifest.
 
 ### Local language-server override
 
-Until `stylus-lsp` has its first npm release, build the local package:
+To test unpublished language-server changes, build the local package:
 
 ```sh
 npm run build --workspace packages/language-server
@@ -42,8 +42,8 @@ Then add an absolute path to Zed's settings:
 ```
 
 The adapter recognizes JavaScript overrides and still uses Zed's managed Node.js
-binary. After the npm release, remove `binary`; the extension will install and
-cache the server automatically.
+binary. Remove `binary` to test the released package; the extension installs and
+caches `stylus-lsp` automatically.
 
 Project-specific aliases and include paths belong under the same server's
 `settings` field. See the

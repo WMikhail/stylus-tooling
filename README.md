@@ -62,12 +62,15 @@ npm run test:e2e --workspace packages/language-server
 npm run benchmark:lsp -- --sizes=1000,5000,10000
 ```
 
-To test the Zed adapter before the first npm release:
+To test local Zed adapter or language-server changes:
 
 1. Run `npm run build` from the repository root.
 2. Configure the local server path as shown in
    [`editors/zed/README.md`](editors/zed/README.md#local-language-server-override).
 3. Run `zed: install dev extension` and select `editors/zed`.
+
+Without a local binary override, the adapter installs the released
+`stylus-lsp@0.6.0` package from npm.
 
 ## Releasing
 

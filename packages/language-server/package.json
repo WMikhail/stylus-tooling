@@ -42,7 +42,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WMikhail/stylus-tooling.git",
+    "url": "git+https://github.com/WMikhail/stylus-tooling.git",
     "directory": "packages/language-server"
   },
   "homepage": "https://github.com/WMikhail/stylus-tooling/tree/main/packages/language-server#readme",
