@@ -1,0 +1,27 @@
+id = "stylus"
+name = "Stylus"
+version = "0.6.0"
+schema_version = 1
+authors = ["WMikhail"]
+description = "Stylus language support with Tree-sitter semantics, navigation, refactoring, completion, and diagnostics"
+repository = "https://github.com/WMikhail/stylus-tooling"
+languages = ["languages/stylus"]
+snippets = ["./snippets/stylus.json"]
+
+[lib]
+kind = "Rust"
+version = "0.7.0"
+
+[language_servers.stylus-language-server]
+language = "Stylus"
+languages = ["Stylus", "Vue.js", "Svelte", "Astro"]
+
+[language_servers.stylus-language-server.language_ids]
+Stylus = "stylus"
+"Vue.js" = "vue"
+Svelte = "svelte"
+Astro = "astro"
+
+[grammars.stylus]
+repository = "https://github.com/WMikhail/tree-sitter-stylus"
+rev = "38de08cc3f6c7d5284280312a5181d4803df63c0"

@@ -1,0 +1,9 @@
+.DS_Store
+grammars/
+vendor/
+build/
+node_modules/
+target/
+extension.wasm
+dist/
+*.tgz

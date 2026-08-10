@@ -1,0 +1,173 @@
+{
+  "colors": [
+    {
+      "color": { "alpha": 1, "blue": 1, "green": 1, "red": 1 },
+      "range": {
+        "end": { "character": 13, "line": 3 },
+        "start": { "character": 9, "line": 3 }
+      }
+    },
+    {
+      "color": { "alpha": 1, "blue": 0.6, "green": 0.4, "red": 0.2 },
+      "range": {
+        "end": { "character": 19, "line": 8 },
+        "start": { "character": 15, "line": 8 }
+      }
+    }
+  ],
+  "completion": {
+    "isIncomplete": false,
+    "items": [
+      {
+        "detail": "variable = #fff",
+        "filterText": "$local",
+        "kind": 6,
+        "label": "$local",
+        "sortText": "0000:$local",
+        "textEdit": {
+          "newText": "$local",
+          "range": {
+            "end": { "character": 3, "line": 3 },
+            "start": { "character": 0, "line": 3 }
+          }
+        }
+      }
+    ]
+  },
+  "definition": {
+    "range": {
+      "end": { "character": 6, "line": 1 },
+      "start": { "character": 0, "line": 1 }
+    },
+    "uri": "file://<ROOT>/tokens.styl"
+  },
+  "diagnostics": [
+    {
+      "code": "stylus.unknown-variable",
+      "message": "Unknown variable '$lo'.",
+      "range": {
+        "end": { "character": 16, "line": 7 },
+        "start": { "character": 13, "line": 7 }
+      },
+      "severity": 2,
+      "source": "stylus"
+    },
+    {
+      "code": "stylus.unknown-variable",
+      "message": "Unknown variable '$missing'.",
+      "range": {
+        "end": { "character": 24, "line": 9 },
+        "start": { "character": 16, "line": 9 }
+      },
+      "severity": 2,
+      "source": "stylus"
+    }
+  ],
+  "documentSymbols": [
+    {
+      "detail": "variable = #fff",
+      "kind": 13,
+      "name": "$local",
+      "range": {
+        "end": { "character": 13, "line": 3 },
+        "start": { "character": 0, "line": 3 }
+      },
+      "selectionRange": {
+        "end": { "character": 6, "line": 3 },
+        "start": { "character": 0, "line": 3 }
+      }
+    },
+    {
+      "detail": "selector",
+      "kind": 5,
+      "name": ".card",
+      "range": {
+        "end": { "character": 0, "line": 10 },
+        "start": { "character": 0, "line": 4 }
+      },
+      "selectionRange": {
+        "end": { "character": 5, "line": 4 },
+        "start": { "character": 0, "line": 4 }
+      }
+    }
+  ],
+  "hover": {
+    "contents": {
+      "kind": "markdown",
+      "value": "```stylus\n$brand = #123456\n```\n\n**Kind:** variable\n\n**Defined in:** file://<ROOT>/tokens.styl\n\n**Imported from:** file://<ROOT>/tokens.styl\n\nShared brand color"
+    },
+    "range": {
+      "end": { "character": 14, "line": 5 },
+      "start": { "character": 8, "line": 5 }
+    }
+  },
+  "prepareRename": {
+    "placeholder": "$brand",
+    "range": {
+      "end": { "character": 14, "line": 5 },
+      "start": { "character": 8, "line": 5 }
+    }
+  },
+  "references": [
+    {
+      "range": {
+        "end": { "character": 14, "line": 5 },
+        "start": { "character": 8, "line": 5 }
+      },
+      "uri": "file://<ROOT>/Card.vue"
+    },
+    {
+      "range": {
+        "end": { "character": 6, "line": 1 },
+        "start": { "character": 0, "line": 1 }
+      },
+      "uri": "file://<ROOT>/tokens.styl"
+    }
+  ],
+  "rename": {
+    "changes": {
+      "file://<ROOT>/Card.vue": [
+        {
+          "newText": "$primary",
+          "range": {
+            "end": { "character": 14, "line": 5 },
+            "start": { "character": 8, "line": 5 }
+          }
+        }
+      ],
+      "file://<ROOT>/tokens.styl": [
+        {
+          "newText": "$primary",
+          "range": {
+            "end": { "character": 6, "line": 1 },
+            "start": { "character": 0, "line": 1 }
+          }
+        }
+      ]
+    }
+  },
+  "signatureHelp": {
+    "activeParameter": 1,
+    "activeSignature": 0,
+    "signatures": [
+      {
+        "label": "add($a, $b)",
+        "parameters": [{ "label": "$a" }, { "label": "$b" }]
+      }
+    ]
+  },
+  "workspaceSymbols": [
+    {
+      "containerName": "variable",
+      "kind": 13,
+      "location": {
+        "range": {
+          "end": { "character": 6, "line": 1 },
+          "start": { "character": 0, "line": 1 }
+        },
+        "uri": "file://<ROOT>/tokens.styl"
+      },
+      "name": "$brand"
+    }
+  ]
+}

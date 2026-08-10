@@ -1,0 +1,21 @@
+primary = #3498db
+// <- definition.constant
+
+shadow(value)
+  // <- definition.function
+  color value
+  //    ^ reference.constant
+
+.card
+  // <- definition.class
+  color shadow(primary)
+  //    ^ reference.call
+  //           ^ reference.constant
+  border-color darken(primary, 10%)
+  //           ^ !reference.call
+  filter blur(2px)
+  //     ^ !reference.call
+
+.warning
+  @extends .card
+  //       ^ reference.class

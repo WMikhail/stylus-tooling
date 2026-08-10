@@ -1,0 +1,155 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["*"]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  language-server:
+    name: LSP (${{ matrix.os }}, Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 22
+          - os: ubuntu-latest
+            node: 24
+          - os: macos-latest
+            node: 24
+          - os: windows-latest
+            node: 24
+
+    steps:
+      - name: Check out tooling
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Reject high-severity production vulnerabilities
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Check and test language server
+        run: |
+          npm run check:versions
+          npm run format:check
+          npm run lint
+          npm run check --workspace packages/language-server
+          npm run build --workspace packages/language-server
+          npm run test:unit --workspace packages/language-server
+          npm run test:integration --workspace packages/language-server
+          npm run test:golden --workspace packages/language-server
+          npm run test:e2e --workspace packages/language-server
+
+      - name: Test packed npm artifact
+        run: node scripts/test-language-server-package.mjs
+
+      - name: Smoke benchmark incremental workspace behavior
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 24
+        run: npm run benchmark --workspace packages/language-server -- --sizes=1000 --assert
+
+      - name: Verify generated files are clean
+        shell: bash
+        run: git diff --exit-code
+
+  extension:
+    name: Zed extension and grammar
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Check out tooling
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Rust stable and WASI target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+          targets: wasm32-wasip2
+
+      - name: Format, lint, and build extension WASM
+        run: |
+          cargo fmt --manifest-path editors/zed/Cargo.toml --check
+          cargo clippy --manifest-path editors/zed/Cargo.toml --target wasm32-wasip2 -- -D warnings
+          cargo build --manifest-path editors/zed/Cargo.toml --release --target wasm32-wasip2
+          cp editors/zed/target/wasm32-wasip2/release/stylus.wasm extension.wasm
+          test -s extension.wasm
+
+      - name: Validate development metadata and Rust adapter
+        run: |
+          python3 scripts/test-validate-extension.py
+          python3 scripts/validate-extension.py
+          cargo check --manifest-path editors/zed/Cargo.toml
+
+      - name: Resolve grammar source
+        id: grammar
+        shell: bash
+        run: |
+          grammar_repository="$(python3 -c 'import tomllib; print(tomllib.load(open("editors/zed/extension.toml", "rb"))["grammars"]["stylus"]["repository"])')"
+          grammar_revision="$(python3 -c 'import tomllib; print(tomllib.load(open("editors/zed/extension.toml", "rb"))["grammars"]["stylus"]["rev"])')"
+          if [[ "$grammar_repository" == https://github.com/* ]]; then
+            echo "public=true" >> "$GITHUB_OUTPUT"
+            echo "repository=$grammar_repository" >> "$GITHUB_OUTPUT"
+            echo "revision=$grammar_revision" >> "$GITHUB_OUTPUT"
+          else
+            echo "public=false" >> "$GITHUB_OUTPUT"
+            echo "Grammar checks are deferred until the public HTTPS repository is configured."
+          fi
+
+      - name: Check out pinned grammar
+        if: steps.grammar.outputs.public == 'true'
+        run: |
+          git clone "${{ steps.grammar.outputs.repository }}" vendor/tree-sitter-stylus
+          git -C vendor/tree-sitter-stylus checkout "${{ steps.grammar.outputs.revision }}"
+
+      - name: Install grammar dependencies
+        if: steps.grammar.outputs.public == 'true'
+        run: npm ci --prefix vendor/tree-sitter-stylus
+
+      - name: Run complete extension checks
+        if: steps.grammar.outputs.public == 'true'
+        run: ./scripts/check.sh
+        env:
+          STYLUS_FUZZ_ITERATIONS: ${{ github.event_name == 'schedule' && '5000' || '100' }}
+
+      - name: Verify generated files are clean
+        run: git diff --exit-code
+
+  release-metadata:
+    name: Release metadata
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tooling
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Enforce public marketplace metadata
+        run: ./scripts/check-release.sh

@@ -1,0 +1,120 @@
+@require "./partials/tokens.styl"
+@require "./partials/mixins.styl"
+
+.ui-button
+  align-items center
+  appearance none
+  border 1px solid transparent
+  border-radius $radius-md
+  cursor pointer
+  display inline-flex
+  font-weight 600
+  gap $space-2
+  justify-content center
+  min-height 40px
+  padding $space-2 $space-4
+  text-decoration none
+  transition background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease
+  user-select none
+  button-tone($primary)
+
+  &:hover
+    button-tone($primary-strong)
+    transform translateY(-1px)
+
+  &:focus-visible
+    focus-ring()
+
+  &:active
+    transform translateY(0)
+
+  &:disabled,
+  &[aria-disabled="true"]
+    cursor not-allowed
+    opacity .55
+    pointer-events none
+
+  &--ghost
+    background transparent
+    border-color $border
+    color $text
+
+    &:hover
+      background $surface-muted
+      border-color darken($border, 8%)
+
+  &--danger
+    button-tone($danger)
+
+.ui-card
+  background $surface
+  border 1px solid $border
+  border-radius $radius-md
+  elevation(1)
+  overflow hidden
+
+  &__header,
+  &__body,
+  &__footer
+    padding $space-4
+
+  &__header
+    border-bottom 1px solid $border
+
+  &__title
+    color $text
+    font-size 1.125rem
+    font-weight 700
+    margin 0
+
+  &__description
+    color $text-muted
+    margin $space-1 0 0
+
+  &__footer
+    align-items center
+    background $surface-muted
+    display flex
+    gap $space-2
+    justify-content flex-end
+
+.ui-visually-hidden
+  visually-hidden()
+
+for column in 1 2 3 4
+  .ui-grid--{column}
+    grid-template-columns repeat(column, minmax(0, 1fr))
+
+@supports (display: grid)
+  .ui-grid
+    display grid
+    gap $space-4
+
+@media (min-width: $breakpoint-sm)
+  .ui-card
+    &__header,
+    &__body,
+    &__footer
+      padding $space-6
+
+@media (min-width: $breakpoint-lg)
+  .ui-shell
+    margin-inline auto
+    max-width 72rem
+    padding-inline $space-8
+
+@media (prefers-reduced-motion: reduce)
+  .ui-button
+    transition none
+
+@keyframes ui-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .6;
+  }
+}
+
+.ui-loading
+  animation ui-pulse 1.4s ease-in-out infinite

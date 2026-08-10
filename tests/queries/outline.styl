@@ -1,0 +1,29 @@
+spacing = 8px
+// <- name
+// <- item
+
+@import "tokens"
+// <- item
+//      ^ name
+
+scale(value, factor = 2)
+  // <- name
+  // <- item
+  //  ^ context
+  return value * factor
+
+.card
+  // <- name
+  // <- item
+  color red
+
+@font-face
+  // <- name
+  // <- item
+  font-family "Inter"
+
+@media screen and (min-width: 40em)
+  // <- item
+  //   ^ name
+  .card
+    color blue

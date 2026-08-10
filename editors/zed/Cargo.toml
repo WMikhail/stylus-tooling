@@ -1,0 +1,13 @@
+[package]
+name = "stylus"
+version = "0.6.0"
+edition = "2021"
+publish = false
+license = "MIT"
+
+[lib]
+path = "src/stylus.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.7.0"

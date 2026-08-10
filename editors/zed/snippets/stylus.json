@@ -1,0 +1,81 @@
+{
+  "Media query": {
+    "prefix": "media",
+    "body": [
+      "@media (${1:min-width}: ${2:48rem})",
+      "  $0"
+    ],
+    "description": "Create a Stylus media query"
+  },
+  "Feature query": {
+    "prefix": "supports",
+    "body": [
+      "@supports (${1:display}: ${2:grid})",
+      "  $0"
+    ],
+    "description": "Create a CSS feature query"
+  },
+  "Keyframes": {
+    "prefix": "keyframes",
+    "body": [
+      "@keyframes ${1:fade-in}",
+      "  from",
+      "    ${2:opacity} ${3:0}",
+      "  to",
+      "    ${2:opacity} ${4:1}",
+      "",
+      "$0"
+    ],
+    "description": "Create a two-step keyframe animation"
+  },
+  "Function": {
+    "prefix": "function",
+    "body": [
+      "${1:double}(${2:value})",
+      "  return ${2:value} * ${3:2}",
+      "",
+      "$0"
+    ],
+    "description": "Create a Stylus function"
+  },
+  "Mixin": {
+    "prefix": "mixin",
+    "body": [
+      "${1:button-reset}(${2:value})",
+      "  ${3:appearance} ${2:value}",
+      "  $0"
+    ],
+    "description": "Create an indentation-based mixin"
+  },
+  "Each loop": {
+    "prefix": "each",
+    "body": [
+      "for ${1:item}, ${2:index} in ${3:items}",
+      "  .${4:item}-{${2:index}}",
+      "    $0"
+    ],
+    "description": "Iterate over a list with its index"
+  },
+  "Property group": {
+    "prefix": "property-group",
+    "body": [
+      "${1:font}",
+      "  ${2:family} ${3:system-ui}",
+      "  ${4:size} ${5:1rem}",
+      "  $0"
+    ],
+    "description": "Create a Stylus property group"
+  },
+  "CSS literal": {
+    "prefix": "css-literal",
+    "body": [
+      "@css {",
+      "  ${1:.selector} {",
+      "    ${2:property}: ${3:value};",
+      "  }",
+      "}",
+      "$0"
+    ],
+    "description": "Insert literal CSS inside Stylus"
+  }
+}

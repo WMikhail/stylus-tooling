@@ -1,0 +1,40 @@
+{
+  "name": "stylus-tooling",
+  "version": "0.6.0",
+  "private": true,
+  "description": "Tree-sitter Stylus language tooling and the Stylus extension for Zed",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "benchmark:lsp": "npm run benchmark --workspace packages/language-server --",
+    "build": "npm run build --workspace packages/language-server",
+    "check": "./scripts/check.sh",
+    "check:release": "./scripts/check-release.sh",
+    "check:versions": "node scripts/validate-versions.mjs",
+    "format": "prettier --write packages/language-server/src packages/language-server/tests packages/language-server/benchmarks packages/language-server/package.json package.json .github docs README.md",
+    "format:check": "prettier --check packages/language-server/src packages/language-server/tests packages/language-server/benchmarks packages/language-server/package.json package.json .github docs README.md",
+    "lint": "eslint packages/language-server/src packages/language-server/tests packages/language-server/benchmarks scripts/*.mjs",
+    "test": "npm test --workspace packages/language-server",
+    "pack:lsp": "npm pack --workspace packages/language-server"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WMikhail/stylus-tooling.git"
+  },
+  "homepage": "https://github.com/WMikhail/stylus-tooling#readme",
+  "bugs": {
+    "url": "https://github.com/WMikhail/stylus-tooling/issues"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "prettier": "^3.9.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.64.0"
+  }
+}
