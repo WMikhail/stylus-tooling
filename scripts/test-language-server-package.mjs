@@ -11,28 +11,38 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageDirectory = path.join(root, "packages", "language-server");
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 
+function quoteWindowsArgument(argument) {
+  return `"${argument.replaceAll('"', '""')}"`;
+}
+
 function run(command, args, cwd) {
-  const result = spawnSync(command, args, {
+  const isWindows = process.platform === "win32";
+  const executable = isWindows
+    ? `${command} ${args.map(quoteWindowsArgument).join(" ")}`
+    : command;
+  const result = spawnSync(executable, isWindows ? [] : args, {
     cwd,
     encoding: "utf8",
+    shell: isWindows,
     env: {
       ...process.env,
       npm_config_cache: path.join(temporaryDirectory, "npm-cache"),
     },
   });
   if (result.status !== 0) {
-    throw new Error(
-      `${command} ${args.join(" ")} failed:\n${result.stderr || result.stdout}`,
-    );
+    const failure =
+      result.error?.stack ||
+      result.stderr ||
+      result.stdout ||
+      `process exited with status ${result.status}`;
+    throw new Error(`${command} ${args.join(" ")} failed:\n${failure}`);
   }
   return result.stdout;
 }
 
 function send(child, message) {
   const json = JSON.stringify(message);
-  child.stdin.write(
-    `Content-Length: ${Buffer.byteLength(json, "utf8")}\r\n\r\n${json}`,
-  );
+  child.stdin.write(`Content-Length: ${Buffer.byteLength(json, "utf8")}\r\n\r\n${json}`);
 }
 
 function responseReader(child) {
@@ -160,9 +170,7 @@ try {
   send(child, { jsonrpc: "2.0", method: "exit" });
   await new Promise((resolve) => child.once("exit", resolve));
 
-  console.log(
-    `Packed, installed, and launched stylus-lsp@${packed.version}`,
-  );
+  console.log(`Packed, installed, and launched stylus-lsp@${packed.version}`);
 } finally {
   await fs.rm(temporaryDirectory, { recursive: true, force: true });
 }
