@@ -21,3 +21,35 @@ body
   color primary
   // <- property
   //    ^ variable
+
+apply($fn)
+  $fn()
+  // <- function
+
+#add_num
+// <- type
+  color #abc
+  //    ^ string.special
+
+#abc
+// <- type
+  color #fff
+
+@-webkit-keyframes blink
+// <- keyword
+//                 ^ label
+  from
+    opacity 0
+
+.group
+  a:hover,
+  // ^ attribute
+  // ^ !variable
+  a:focus
+    color red
+  #abc,
+  // <- type
+  #def
+  // <- type
+    color #fff
+    //    ^ string.special

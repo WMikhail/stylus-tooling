@@ -1,6 +1,6 @@
 {
   "name": "stylus-tooling",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "Tree-sitter Stylus language tooling and the Stylus extension for Zed",
   "workspaces": [

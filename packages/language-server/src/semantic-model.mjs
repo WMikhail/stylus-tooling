@@ -128,8 +128,9 @@ function nodeKey(node) {
 
 /** @param {TreeNode} node @returns {TreeNode[]} */
 function childNodes(node) {
-  return node.namedChildren.filter(
-    /** @returns {child is TreeNode} */ (child) => child !== null,
+  return node.children.filter(
+    /** @returns {child is TreeNode} */ (child) =>
+      child !== null && (child.isNamed || child.isMissing),
   );
 }
 
@@ -781,7 +782,7 @@ export async function buildSemanticModel(embedded, parsed) {
             : "function";
         addReference({
           nameNode,
-          expectedKinds: [expectedKind],
+          expectedKinds: [expectedKind, "variable"],
           scope,
           role: "call",
           fullNode: node,
@@ -806,11 +807,39 @@ export async function buildSemanticModel(embedded, parsed) {
         ANIMATION_KEYWORDS.has(node.text.toLowerCase());
       if (!animationKeyword) {
         const animationName = inAnimation && !node.text.startsWith("$");
+        const argument = node.parent;
+        const argumentsNode = argument?.parent;
+        const call = argumentsNode?.parent;
+        const callName =
+          call?.type === "call_expression"
+            ? field(call, "function")?.text.toLowerCase()
+            : null;
+        const argumentIndex =
+          argumentsNode?.type === "arguments" &&
+          (callName === "counter" || callName === "counters")
+            ? argumentsNode.namedChildren.findIndex((child) => child?.id === argument?.id)
+            : -1;
+        // Counter names and styles may be CSS literals or resolved Stylus variables.
+        const cssCounterIdentifier =
+          !node.text.startsWith("$") &&
+          argument?.type === "expression" &&
+          argument.namedChildCount === 1 &&
+          argumentsNode?.type === "arguments" &&
+          ((callName === "counter" && (argumentIndex === 0 || argumentIndex === 1)) ||
+            (callName === "counters" && (argumentIndex === 0 || argumentIndex === 2)));
         addReference({
           nameNode: node,
-          expectedKinds: animationName ? ["variable", "keyframes"] : ["variable"],
+          expectedKinds: animationName
+            ? ["variable", "keyframes"]
+            : node.text.startsWith("$")
+              ? ["variable"]
+              : ["variable", "callable"],
           scope,
-          role: animationName ? "keyframes" : "usage",
+          role: animationName
+            ? "keyframes"
+            : cssCounterIdentifier
+              ? "css-counter-identifier"
+              : "usage",
         });
       }
     }

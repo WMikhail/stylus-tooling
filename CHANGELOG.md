@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.1
+
+- Fixed compact declarations and semicolon handling, space-separated parenthesized lists, continued values, percentage casts, and modulo expressions.
+- Resolved calls through variables and parameters, including definition, references, rename, and builtin function values in assignments and parameter defaults.
+- Recognized CSS counter names and custom counter styles in `counter()` and `counters()` without unknown-variable warnings.
+- Fixed mixed root indentation in embedded styles and ignored comment-only indentation, including trailing comments without a newline and braces inside comments and strings.
+- Preserved grouped pseudo-selectors and HEX-like ID selectors while retaining HEX color types and highlighting.
+- Added combined `/deep/` and `>>>` selectors and vendor-prefixed keyframes without false conflicts between prefixed and standard definitions.
+- Reported missing closing punctuation in incomplete CSS blocks and refreshed the packaged grammar WASM.
+- Updated the transitive `brace-expansion` dependency to 5.0.12 to address high-severity denial-of-service advisories.
+
 ## 0.6.0
 
 - Added Vue, Svelte, Astro, Quasar 1/2, Vite, Webpack, Nuxt, multi-root, monorepo, package-specific settings, static aliases, themes, `.gitignore`, and excludes.

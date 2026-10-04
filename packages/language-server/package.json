@@ -1,6 +1,6 @@
 {
   "name": "stylus-lsp",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Tree-sitter language server for Stylus and embedded component style blocks",
   "author": "WMikhail",
   "type": "module",
@@ -26,7 +26,7 @@
     "test:e2e": "node --test tests/server.test.mjs",
     "test:golden": "node --test tests/golden.test.mjs",
     "test:integration": "node --test tests/analyzer.test.mjs tests/authoring.test.mjs tests/configuration.test.mjs tests/diagnostics.test.mjs tests/fixture-projects.test.mjs tests/navigation.test.mjs",
-    "test:unit": "node --test tests/background-tasks.test.mjs tests/cache-invalidation.test.mjs tests/embedded-documents.test.mjs tests/glob-utils.test.mjs tests/import-resolver.test.mjs tests/protocol.test.mjs tests/semantic-model.test.mjs tests/workspace-scanner.test.mjs"
+    "test:unit": "node --test tests/background-tasks.test.mjs tests/cache-invalidation.test.mjs tests/embedded-documents.test.mjs tests/glob-utils.test.mjs tests/import-resolver.test.mjs tests/parser-compatibility.test.mjs tests/protocol.test.mjs tests/semantic-model.test.mjs tests/workspace-scanner.test.mjs"
   },
   "engines": {
     "node": ">=22"

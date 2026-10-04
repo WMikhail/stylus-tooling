@@ -262,7 +262,13 @@ function conflictGroups(model) {
     ) {
       continue;
     }
-    const key = `${symbol.scopeId}:${symbol.name}`;
+    const prefix =
+      symbol.kind === "keyframes"
+        ? (model.embedded.text
+            .slice(symbol.localFullStart, symbol.localNameStart)
+            .match(/^@-(?:webkit|moz|o|ms)-/)?.[0] ?? "")
+        : "";
+    const key = `${symbol.scopeId}:${symbol.name}:${prefix}`;
     const values = groups.get(key) ?? [];
     values.push(symbol);
     groups.set(key, values);
@@ -312,7 +318,10 @@ function shouldSuppressUnknown(reference, code) {
   return (
     code === DIAGNOSTIC_CODES.unknownVariable &&
     !reference.name.startsWith("$") &&
-    isKnownCssIdentifier(reference.name)
+    (reference.role === "css-counter-identifier" ||
+      isKnownCssIdentifier(reference.name) ||
+      (reference.expectedKinds.includes("callable") &&
+        STYLUS_BUILTIN_FUNCTIONS.has(reference.name.toLowerCase())))
   );
 }
 
