@@ -70,7 +70,7 @@ To test local Zed adapter or language-server changes:
 3. Run `zed: install dev extension` and select `editors/zed`.
 
 Without a local binary override, the adapter installs the pinned
-`stylus-lsp@0.6.1` package from npm.
+`stylus-lsp@0.6.2` package from npm.
 
 ## Releasing
 
@@ -96,12 +96,12 @@ Release the grammar, language server, and extension in this order:
 3. Run `npm run check`, `npm run check:release`, and
    `npm audit --omit=dev --audit-level=high`. Commit the tooling changes, push them,
    and wait for CI to pass.
-4. Publish a GitHub release with the tag `language-server-v0.6.1`, using the
+4. Publish a GitHub release with the tag `language-server-v0.6.2`, using the
    matching entry in [CHANGELOG.md](CHANGELOG.md) as its description. The
-   `publish-language-server.yml` workflow publishes `stylus-lsp@0.6.1` through npm
+   `publish-language-server.yml` workflow publishes `stylus-lsp@0.6.2` through npm
    trusted publishing; wait for it to succeed.
 5. After the npm package is available, update `zed-industries/extensions` to the
-   tooling commit with `path = "editors/zed"` and `version = "0.6.1"`.
+   tooling commit with `path = "editors/zed"` and `version = "0.6.2"`.
 
 The Zed adapter installs the npm version matching the extension's Cargo version,
 so publishing the extension before npm would break automatic server installation.

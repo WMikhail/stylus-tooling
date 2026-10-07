@@ -57,7 +57,7 @@ When submitting the parent repository to `zed-industries/extensions`, use:
 [stylus]
 submodule = "extensions/stylus"
 path = "editors/zed"
-version = "0.6.1"
+version = "0.6.2"
 ```
 
 The extension path contains its own MIT license and never ships the language

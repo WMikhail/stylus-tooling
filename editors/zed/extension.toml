@@ -1,6 +1,6 @@
 id = "stylus"
 name = "Stylus"
-version = "0.6.1"
+version = "0.6.2"
 schema_version = 1
 authors = ["WMikhail"]
 description = "Stylus language support with Tree-sitter semantics, navigation, refactoring, completion, and diagnostics"
@@ -24,4 +24,4 @@ Astro = "astro"
 
 [grammars.stylus]
 repository = "https://github.com/WMikhail/tree-sitter-stylus"
-rev = "223a44d8c66ebc07a3f5c7bec76efc257f2d61dd"
+rev = "67a9c87f2f2ae5e25365cdb4483aa9ebbaadecff"

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.2
+
+- Fixed parsing and import resolution for mixins named after CSS properties, including `font()`, and preserved indexing of mixins declared after them (#8).
+- Recognized whitespace and easing keywords such as `pre-wrap` and `ease-in` without false unknown-variable warnings, while retaining diagnostics for misspelled values and undeclared variables.
+- Added grammar and language-server regressions for property-named mixins and CSS keywords in Stylus files and Vue style blocks; refreshed the packaged grammar WASM.
+- Updated the transitive `source-map-js` dependency to 1.2.2 to address a high-severity denial-of-service advisory.
+
 ## 0.6.1
 
 - Fixed compact declarations and semicolon handling, space-separated parenthesized lists, continued values, percentage casts, and modulo expressions.

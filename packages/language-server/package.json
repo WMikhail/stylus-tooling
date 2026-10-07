@@ -1,6 +1,6 @@
 {
   "name": "stylus-lsp",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Tree-sitter language server for Stylus and embedded component style blocks",
   "author": "WMikhail",
   "type": "module",

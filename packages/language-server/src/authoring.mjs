@@ -22,6 +22,17 @@ const KNOWN_CSS_IDENTIFIERS = new Set([
   "normal",
   "currentcolor",
   "transparent",
+  // These keywords are absent from the CSS provider's property.values.
+  "pre",
+  "pre-line",
+  "pre-wrap",
+  "ease",
+  "ease-in",
+  "ease-in-out",
+  "ease-out",
+  "linear",
+  "step-end",
+  "step-start",
 ]);
 const KNOWN_CSS_FUNCTIONS = new Set([
   "attr",

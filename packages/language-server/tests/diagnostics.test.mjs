@@ -107,6 +107,52 @@ test("does not flag animation keywords, animation variables, or Stylus built-ins
   );
 });
 
+test("recognizes whitespace and easing literals without hiding unknown variables", async () => {
+  const root = await workspace();
+  const source = `.modal > .modal-content > .modal-body.modal-message
+  white-space pre-wrap
+
+body.desktop table.q-table.highlight tbody tr
+  transition all .28s ease-in
+  white-space pre
+  white-space pre-line
+  white-space nowrap
+  white-space break-spaces
+  transition-timing-function ease
+  transition-timing-function ease-out
+  transition-timing-function ease-in-out
+  transition-timing-function linear
+  transition-timing-function step-start
+  transition-timing-function step-end
+  animation-timing-function ease-in
+  white-space pre-warp
+  transition all .28s eas-in
+  white-space $pre-wrap
+  transition all .28s $ease-in
+`;
+  const index = new WorkspaceIndex([filePathToUri(root)]);
+  try {
+    for (const extension of ["styl", "vue"]) {
+      const uri = filePathToUri(path.join(root, `main.${extension}`));
+      const text =
+        extension === "vue"
+          ? `<template><div/></template>\n<style lang="stylus">\n${source}</style>`
+          : source;
+      await index.openDocument(uri, text);
+      assert.deepEqual(
+        (await index.diagnostics(uri)).map(({ code, message }) => ({ code, message })),
+        ["pre-warp", "eas-in", "$pre-wrap", "$ease-in"].map((name) => ({
+          code: DIAGNOSTIC_CODES.unknownVariable,
+          message: `Unknown variable '${name}'.`,
+        })),
+        extension,
+      );
+    }
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
+
 test("publishes only the latest diagnostics computation for a URI", async () => {
   const uri = filePathToUri("/tmp/latest-diagnostics.styl");
   const pending = [];

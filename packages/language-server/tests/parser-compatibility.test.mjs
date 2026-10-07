@@ -115,6 +115,61 @@ test("reports missing punctuation in incomplete CSS blocks", async () => {
   }
 });
 
+test("property-named mixins support definitions, calls, and imports", async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "stylus-property-mixins-"));
+  const libPath = path.join(root, "lib.styl");
+  const libUri = filePathToUri(libPath);
+  const index = new WorkspaceIndex([filePathToUri(root)]);
+  const names = [
+    "border",
+    "font",
+    "list",
+    "text",
+    "outline",
+    "overflow",
+    "animation",
+    "transition",
+    "flex",
+    "grid",
+    "place",
+  ];
+  try {
+    for (const name of names) {
+      for (const parameters of ["", "$a", "$a, $b = normal"]) {
+        const value = parameters ? "$a" : '"Arial"';
+        const source = `${name}(${parameters})\n  font-family ${value}\n\nafter-mix()\n  color red\n\nnested()\n  ${name}(${parameters})\n    font-family ${value}\n  ${name}("Arial")\n\n${name}("Arial")\n.a\n  ${name}("Arial")\n  after-mix()\n`;
+        await fs.writeFile(libPath, source);
+        await index.openDocument(libUri, source);
+        assert.deepEqual(await index.diagnostics(libUri), [], `${name}(${parameters})`);
+        for (const extension of ["styl", "vue"]) {
+          const uri = filePathToUri(path.join(root, `use.${extension}`));
+          const usage = `@import "./lib.styl"\n.a\n  ${name}("Arial")\n  after-mix()\n`;
+          const text =
+            extension === "vue"
+              ? `<template><div/></template>\n<style lang="stylus">\n${usage}</style>`
+              : usage;
+          const lineOffset = extension === "vue" ? 2 : 0;
+          await index.openDocument(uri, text);
+          assert.deepEqual(await index.diagnostics(uri), [], `${name} in ${extension}`);
+          for (const [line, definitionLine] of [
+            [2, 0],
+            [3, 3],
+          ]) {
+            const definition = await index.definition(uri, {
+              line: line + lineOffset,
+              character: 3,
+            });
+            assert.equal(definition?.uri, libUri, name);
+            assert.equal(definition?.range.start.line, definitionLine, name);
+          }
+        }
+      }
+    }
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
+
 test("variable calls resolve to parameters and support references, rename, and diagnostics", async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "stylus-variable-calls-"));
   const source =
