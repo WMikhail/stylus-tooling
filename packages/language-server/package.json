@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@astrojs/compiler": "^4.0.0",
-    "@vue/compiler-sfc": "^3.5.40",
+    "@vue/compiler-sfc": "^3.5.41",
     "color-name": "^2.1.0",
     "ignore": "^7.0.6",
     "minimatch": "^10.2.6",
